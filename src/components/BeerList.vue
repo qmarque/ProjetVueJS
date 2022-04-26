@@ -5,12 +5,12 @@
       <input class="input" type="text" aria-label="Nom..." v-model="searchInput">
       <button @click="searchBeer()">Rechercher</button>
     </div>
-    <div class="beerList">
+    <!-- <div class="beerList">
       <div @click="dataBeer(b.id)" class="card" v-for="b in list" :key="b.id" aria-hidden="true">
         <h2 class="title">{{ b.name }}</h2>
         <img :src=" b.image_url" alt="Img beer" />
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
     <div id="paginate" class="paginate">
       <p>
         <a @click="displayPage1()" aria-hidden="true">1</a>
