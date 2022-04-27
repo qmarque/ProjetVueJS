@@ -1,22 +1,20 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+import DataBeerView from '../views/DataBeerView.vue';
+import TransactionsPaginatedView from '../views/TransactionsPaginatedView.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView,
+    name: 'transactions-paginated',
+    component: TransactionsPaginatedView,
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+    path: '/beer/:id',
+    name: 'beer',
+    component: DataBeerView,
   },
 ];
 

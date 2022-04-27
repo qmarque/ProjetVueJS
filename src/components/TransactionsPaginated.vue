@@ -1,15 +1,16 @@
 <template>
 <!--  eslint-disable  -->
   <div class="Beer">
-    <h1 title="Accueil">{{ msg }}</h1>
-    <div class="form">
+     <div class="form">
       <input class="input" type="text" aria-label="Nom..." v-model="searchInput">
-      <button @click="searchBeer()">Rechercher</button>
+      <button @click="searchBeer()" class="buttonSearch">Rechercher</button>
     </div>
     <div class="beerList">
 			<div class="card" v-for="(transaction, index) in paginatedData" :key="index">
-<h2 class="title">{{ transaction.name }}</h2>
-        <img :src=" transaction.image_url" alt="Img beer" />
+        <router-link :to="{ name: 'beer', params: { id: transaction.id } }">
+          <h2 class="title">{{ transaction.name }}</h2>
+          <img :src="transaction.image_url" alt="Img beer" />
+        </router-link>
 			</div>
 		</div>
 
@@ -54,9 +55,10 @@
 
 <script>
 // import { mapActions, mapGetters } from 'vuex';
+// import DataBeer from './DataBeer.vue';
 
 export default {
-  name: 'transactions-paginated',
+  name: 'TransactionsPaginated',
   data() {
     return {
       list: [],
@@ -106,6 +108,7 @@ export default {
     paginatedData() {
       const start = (this.currentPage - 1) * this.perPage;
       const end = start + this.perPage;
+      console.log(this.data);
       return this.data.slice(start, end);
     },
     startPage() {
@@ -167,6 +170,10 @@ export default {
     isPageActive(page) {
       return this.currentPage === page;
     },
+    // dataBeer(id) {
+    //   alert(id);
+    //   this.$emit('/beer', id);
+    // },
 
     // onPageChange(page) {
     //   this.currentPage = page;
@@ -184,7 +191,7 @@ input {
   margin-right: 30px;
   border-radius: 50px;
 }
-button {
+.buttonSearch {
   margin: 0 10px;
   border-radius: 30px;
   background-color: gray;
@@ -226,4 +233,37 @@ button {
 img {
   width: 60%;
 }
+a {
+  text-decoration: none;
+  color: white;
+  }
+.pagination {
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      margin: auto 0 0 0;
+      list-style-type: none;
+}
+
+        button {
+          margin: 0!important;
+          padding: .25rem .5rem;
+          font-size: 1.1rem;
+          border: none;
+          border-radius: .25rem;
+          background: none;
+        }
+
+          button[disabled="disabled"] {
+            color: silver;
+            cursor: default;
+          }
+          button:hover{
+              cursor: default;
+              background-color: transparent;
+              color: black;
+          }
+          button.active {
+            color: red;
+        }
 </style>
