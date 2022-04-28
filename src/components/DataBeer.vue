@@ -1,24 +1,27 @@
 <template>
-  <div>
-    <!-- <div class="form">
-      <input class="input" type="text" aria-label="Nom..." v-model="searchInput">
-      <button @click="searchBeer()">Rechercher</button>
-    </div>
-    <div class="beerList">
-      <div @click="dataBeer(b.id)" class="card" v-for="b in list" :key="b.id" aria-hidden="true">-->
-         <h2 class="title">{{ this.data[0].name }}</h2>
-        <img :src="this.data[0].image_url" alt="Img beer" />
-        {{ this.data[0].description }}
-        <!--<<img :src=" b.image_url" alt="Img beer" />
-       </div>
-    </div>
-    <div id="paginate" class="paginate">
-      <p>
-        <a @click="displayPage1()" aria-hidden="true">1</a>
-        <a> | </a>
-        <a @click="displayPage2()" aria-hidden="true">2</a>
-      </p>
-    </div> -->
+  <div class="root">
+      <div class="card">
+          <h1 class="title">{{ this.data[0].name }}</h1>
+          <h2>{{ this.data[0].tagline }}</h2>
+          <img :src="this.data[0].image_url" alt="Img beer" />
+          <p clas="infos">
+            {{ this.data[0].description }}<br /><br />
+              Mash temperature :   {{ this.data[0].method.mash_temp[0].temp.value }} °C<br />
+              Fermentation temperature :   {{ this.data[0].method.fermentation.temp.value }} °C<br /><br />
+              <ul>
+              Can be tasted with :
+                <li>
+                  {{ this.data[0].food_pairing[0] }}<br />
+                </li>
+                <li>
+                  {{ this.data[0].food_pairing[1] }}<br />
+                </li>
+                <li>
+                  {{ this.data[0].food_pairing[2] }}<br />
+                </li>
+                </ul>
+          </p>
+      </div>
   </div>
 </template>
 
@@ -41,60 +44,44 @@ export default {
     const result = await axios.get(`https://api.punkapi.com/v2/beers/${id}`);
     this.data = result.data;
   },
-
 };
 </script>
 
 <style scoped>
-h1 {
-  color: gray;
-  cursor: grab;
-}
-input {
-  width: 40%;
-  margin-right: 30px;
-  border-radius: 50px;
-}
-button {
-  margin: 0 10px;
-  border-radius: 30px;
-  background-color: gray;
-  border: none;
-  color: white;
-}
-.form{
-  margin: 50px 10%;
-  padding: 10px;
+.root {
+  width: 50%;
+  margin: 0 auto;
   background-color: beige;
-  border-radius: 10px;
-}
-.beerList {
-  background-color: beige;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  margin: 10px;
-  padding: 30px;
-  justify-content: center;
   border-radius: 10px;
 }
 
 .card {
-  border-radius: 10px;
-  border: 2px solid gray;
-  height: auto;
-  width: 120px;
-  margin: 10px;
-  background: gray;
-  color: white;
+  padding-top: "20";
+  margin: 10px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
+h2 {
+  font-style: italic;
+  margin-top: 0;
+  font-size: 15px;
+}
 .title {
-  font-size: 12px;
-  text-align: center;
+  color: white;
+  text-shadow: 0 2px 8px #223161;
+  text-decoration: "none";
+  text-transform: "capitalize";
 }
 
 img {
-  width: 60%;
+  width: 10%;
+}
+
+.infos{
+  margin: 10px;
+  text-align: center;
 }
 </style>
