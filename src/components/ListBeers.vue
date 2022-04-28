@@ -5,25 +5,27 @@
       <button @click="searchBeer()" class="buttonSearch">Rechercher</button>
     </div>
     <div class="form">
-    <div class="containerRange">
-      <div class="min-value numberVal">
-        <input type="number" min="0" max="10000" value="2500" aria-label="true" disabled>
+      <h4>EBC</h4>
+      <div class="containerRange">
+        <div class="min-value numberVal">
+          <input  type="number" min="0" max="300" value="210" aria-label="true" disabled>
+        </div>
+        &nbsp;
+        <div class="range-slider">
+          <div class="progress"></div>
+          <input type="range" class="range-min" min="0" max="300" aria-label="true" value="220">
+          <input type="range" class="range-max" min="0" max="300" aria-label="true" value="240" >
+        </div>
+        &nbsp;
+        <div class="max-value numberVal">
+          <input type="number" min="0" max="300" value="240" aria-label="true" disabled>
+        </div>
+      <button @click="searchBeerRender()" class="buttonSearch">Appliquer</button>
       </div>
-      &nbsp; -
-      <div class="range-slider">
-        <div class="progress"></div>
-        <input type="range" class="range-min" min="0" max="10000" aria-label="true" value="2500">
-        <input type="range" class="range-max" min="0" max="10000" aria-label="true" value="7500">
-      </div>
-      -&nbsp;
-      <div class="max-value numberVal">
-        <input type="number" min="0" max="10000" value="7500" aria-label="true" disabled>
-      </div>
-    </div>
     </div>
 
     <div class="beerList">
-      <div class="card" v-for="(beer, index) in paginatedData" :key="index">
+      <div class="card" v-for="(beer, index) in data" :key="index">
         <router-link :to="{ name: 'beer', params: { id: beer.id } }">
           <h2 class="title">{{ beer.name }}</h2>
           <img :src="beer.image_url" alt="Img beer" />
@@ -33,14 +35,14 @@
 
     <div id="paginate">
       <ul class="pagination" v-if="data.length > 5 || currentPage > 1">
-        <li class="pagination-item" title="Первая страница">
+        <li class="pagination-item">
           <button type="button" @click="onClickFirstPage" :disabled="isInFirstPage">
             <!-- eslint-disable-next-line -->
             <<
           </button>
         </li>
 
-        <li class="pagination-item" title="Предыдущая страница">
+        <li class="pagination-item">
           <button type="button" @click="onClickPreviousPage" :disabled="isInFirstPage">
             <!-- eslint-disable-next-line -->
             <
@@ -57,12 +59,12 @@
           </button>
         </li>
 
-        <li class="pagination-item" title="Следующая страница">
+        <li class="pagination-item">
           <button type="button" @click="onClickNextPage" :disabled="isInLastPage">
             >
           </button>
         </li>
-        <li class="pagination-item" title="Последняя страница">
+        <li class="pagination-item">
           <button type="button" @click="onClickLastPage" :disabled="isInLastPage">
             >>
           </button>
@@ -73,19 +75,27 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'ListBeersView',
   data() {
     return {
       list: [],
+      data: [],
     };
+  },
+  mounted() {
+    axios
+      .get('https://api.punkapi.com/v2/beers')
+      .then((response) => { (this.data = response.data); });
   },
   props: {
     msg: String,
-    data: {
-      type: Array,
-      required: true,
-    },
+    // data: {
+    //   type: Array,
+    //   required: true,
+    // },
     maxVisibleButtons: {
       type: Number,
       required: false,
@@ -138,15 +148,25 @@ export default {
       if (!this.searchInput) {
         alert('Veuillez rentrer le nom de la bière que vous recherchez...');
       }
-      this.list = [];
-      this.data.forEach((beer) => {
-        if (beer.name.match(new RegExp(this.searchInput, 'i'))) {
-          this.list.push(beer);
-        }
-      });
-      if (this.list.length === 0) {
-        alert('Aucune bière ne correpond à votre recherche ...');
-      }
+
+      axios
+        .get(`https://api.punkapi.com/v2/beers?beer_name=${this.searchInput}`)
+        .then((response) => { (this.data = response.data); });
+
+      // this.list = [];
+      // this.data.forEach((beer) => {
+      //   if (beer.name.match(new RegExp(this.searchInput, 'i'))) {
+      //     this.list.push(beer);
+      //   }
+      // });
+      // if (this.list.length === 0) {
+      //   alert('Aucune bière ne correpond à votre recherche ...');
+      // }
+    },
+    searchBeerRender() {
+      axios
+        .get('https://api.punkapi.com/v2/beers?ebc_gt=210&ebc_lt=240')
+        .then((response) => { (this.data = response.data); });
     },
     onClickFirstPage() {
       this.$emit('pagechanged', 1);
@@ -188,6 +208,11 @@ input {
   color: white;
 }
 
+h4{
+  color: black;
+  margin: 5px;
+  font-size: 15px;
+}
 .form{
   margin: 50px 10%;
   padding: 10px;

@@ -14,8 +14,7 @@ export default new Vuex.Store({
   actions: {
     loadTrans(context) {
       axios.get('https://api.punkapi.com/v2/beers').then((response) => {
-        const reversed = response.data;
-        context.commit('loadBeers', reversed);
+        context.commit('loadBeers', response.data);
       });
     },
   },

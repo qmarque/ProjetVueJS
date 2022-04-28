@@ -6,6 +6,7 @@
           <img :src="this.data[0].image_url" alt="Img beer" />
           <p clas="infos">
             {{ this.data[0].description }}<br /><br />
+              EBC :   {{ this.data[0].ebc }}<br />
               Mash temperature :   {{ this.data[0].method.mash_temp[0].temp.value }} °C<br />
               Fermentation temperature :   {{ this.data[0].method.fermentation.temp.value }} °C<br /><br />
               <ul>
