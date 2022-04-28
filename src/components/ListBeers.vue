@@ -1,29 +1,48 @@
 <template>
-<!--  eslint-disable  -->
   <div class="Beer">
      <div class="form">
       <input class="input" type="text" aria-label="Nom..." v-model="searchInput">
       <button @click="searchBeer()" class="buttonSearch">Rechercher</button>
     </div>
+    <div class="form">
+    <div class="containerRange">
+      <div class="min-value numberVal">
+        <input type="number" min="0" max="10000" value="2500" aria-label="true" disabled>
+      </div>
+      &nbsp; -
+      <div class="range-slider">
+        <div class="progress"></div>
+        <input type="range" class="range-min" min="0" max="10000" aria-label="true" value="2500">
+        <input type="range" class="range-max" min="0" max="10000" aria-label="true" value="7500">
+      </div>
+      -&nbsp;
+      <div class="max-value numberVal">
+        <input type="number" min="0" max="10000" value="7500" aria-label="true" disabled>
+      </div>
+    </div>
+    </div>
+
     <div class="beerList">
-			<div class="card" v-for="(transaction, index) in paginatedData" :key="index">
-        <router-link :to="{ name: 'beer', params: { id: transaction.id } }">
-          <h2 class="title">{{ transaction.name }}</h2>
-          <img :src="transaction.image_url" alt="Img beer" />
+      <div class="card" v-for="(beer, index) in paginatedData" :key="index">
+        <router-link :to="{ name: 'beer', params: { id: beer.id } }">
+          <h2 class="title">{{ beer.name }}</h2>
+          <img :src="beer.image_url" alt="Img beer" />
         </router-link>
-			</div>
-		</div>
+        </div>
+        </div>
 
     <div id="paginate">
-		<ul class="pagination" v-if="data.length > 5 || currentPage > 1">
+      <ul class="pagination" v-if="data.length > 5 || currentPage > 1">
         <li class="pagination-item" title="Первая страница">
           <button type="button" @click="onClickFirstPage" :disabled="isInFirstPage">
+            <!-- eslint-disable-next-line -->
             <<
           </button>
         </li>
 
         <li class="pagination-item" title="Предыдущая страница">
           <button type="button" @click="onClickPreviousPage" :disabled="isInFirstPage">
+            <!-- eslint-disable-next-line -->
             <
           </button>
         </li>
@@ -49,23 +68,16 @@
           </button>
         </li>
       </ul>
-	</div>
-	</div>
+    </div>
+  </div>
 </template>
 
 <script>
-// import { mapActions, mapGetters } from 'vuex';
-// import DataBeer from './DataBeer.vue';
-
 export default {
-  name: 'TransactionsPaginated',
+  name: 'ListBeersView',
   data() {
     return {
       list: [],
-      listInit: [],
-      // data: [],
-
-      mutableList: JSON.parse(this.data),
     };
   },
   props: {
@@ -74,14 +86,6 @@ export default {
       type: Array,
       required: true,
     },
-    // list: {
-    //   type: Array,
-    //   // required: true,
-    // },
-    // listInit: {
-    //   type: Array,
-    //   // required: true,
-    // },
     maxVisibleButtons: {
       type: Number,
       required: false,
@@ -108,7 +112,6 @@ export default {
     paginatedData() {
       const start = (this.currentPage - 1) * this.perPage;
       const end = start + this.perPage;
-      console.log(this.data);
       return this.data.slice(start, end);
     },
     startPage() {
@@ -134,23 +137,16 @@ export default {
     searchBeer() {
       if (!this.searchInput) {
         alert('Veuillez rentrer le nom de la bière que vous recherchez...');
-        return;
       }
-
       this.list = [];
-      // this.list = this.data;
       this.data.forEach((beer) => {
         if (beer.name.match(new RegExp(this.searchInput, 'i'))) {
           this.list.push(beer);
         }
       });
-      console.log(this.list);
       if (this.list.length === 0) {
         alert('Aucune bière ne correpond à votre recherche ...');
-        // this.list = this.list1;
       }
-
-      // document.getElementById('paginate').style.display = 'none';
     },
     onClickFirstPage() {
       this.$emit('pagechanged', 1);
@@ -170,27 +166,20 @@ export default {
     isPageActive(page) {
       return this.currentPage === page;
     },
-    // dataBeer(id) {
-    //   alert(id);
-    //   this.$emit('/beer', id);
-    // },
-
-    // onPageChange(page) {
-    //   this.currentPage = page;
-    // },
   },
 };
 </script>
-
 <style scoped>
 h1 {
   color: gray;
 }
+
 input {
   width: 40%;
   margin-right: 30px;
   border-radius: 50px;
 }
+
 .buttonSearch {
   margin: 0 10px;
   border-radius: 30px;
@@ -198,12 +187,14 @@ input {
   border: none;
   color: white;
 }
+
 .form{
   margin: 50px 10%;
   padding: 10px;
   background-color: beige;
   border-radius: 10px;
 }
+
 .beerList {
   background-color: beige;
   list-style: none;
@@ -233,37 +224,108 @@ input {
 img {
   width: 60%;
 }
+
 a {
   text-decoration: none;
   color: white;
-  }
-.pagination {
-      display: flex;
-      justify-content: center;
-      padding: 0;
-      margin: auto 0 0 0;
-      list-style-type: none;
 }
 
-        button {
-          margin: 0!important;
-          padding: .25rem .5rem;
-          font-size: 1.1rem;
-          border: none;
-          border-radius: .25rem;
-          background: none;
-        }
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: auto 0 0 0;
+  list-style-type: none;
+}
 
-          button[disabled="disabled"] {
-            color: silver;
-            cursor: default;
-          }
-          button:hover{
-              cursor: default;
-              background-color: transparent;
-              color: black;
-          }
-          button.active {
-            color: red;
-        }
+button {
+  margin: 0!important;
+  padding: .25rem .5rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: .25rem;
+  background: none;
+}
+
+button[disabled="disabled"] {
+  color: silver;
+  cursor: default;
+}
+
+button:hover{
+    cursor: default;
+    background-color: transparent;
+    color: black;
+}
+
+button.active {
+  color: red;
+}
+
+.containerRange {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 800px;
+  height: 50px;
+  background: white;
+  border-radius: 20px;
+  margin: 0 auto;
+}
+
+.containerRange input[type="number"]{
+  width: 80px;
+  height: 30px;
+  background: white;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.containerRange input[type="number"]::-webkit-outer-spin-button,
+.containerRange input[type="number"]::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+}
+
+.containerRange .range-slider{
+  position: relative;
+  width: 400px;
+  height: 5px;
+  background: #ddd;
+  outline: none;
+  top: 1px;
+  margin: 10px;
+}
+
+.containerRange .range-slider .progress {
+  left: 25%;
+  right: 25%;
+  height: 100%;
+  background: #17a288;
+  border-radius: 50px;
+  position: absolute;
+}
+
+.containerRange .range-slider input[type="range"] {
+  position: absolute;
+  top: -8px;
+  left: -5px;
+  width: 100%;
+  -webkit-appearance: none;
+  pointer-events: none;
+  background: none;
+  outline: none;
+}
+
+.containerRange .range-slider input::-webkit-slider-thumb {
+  pointer-events: auto;
+  -webkit-appearance: none;
+  width: 17px;
+  height: 17px;
+  background: #17a288;
+  border-radius: 50px;
+}
 </style>

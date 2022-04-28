@@ -6,20 +6,20 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    transactions: [],
+    beers: [],
   },
   mutations: {
-    loadTransactions(state, payload) { state.transactions = payload; },
+    loadBeers(state, payload) { state.beers = payload; },
   },
   actions: {
     loadTrans(context) {
       axios.get('https://api.punkapi.com/v2/beers').then((response) => {
         const reversed = response.data;
-        context.commit('loadTransactions', reversed);
+        context.commit('loadBeers', reversed);
       });
     },
   },
   getters: {
-    trans: (state) => state.transactions,
+    trans: (state) => state.beers,
   },
 });

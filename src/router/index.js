@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import DataBeerView from '../views/DataBeerView.vue';
-import TransactionsPaginatedView from '../views/TransactionsPaginatedView.vue';
+import ListBeersView from '../views/ListBeersView.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'transactions-paginated',
-    component: TransactionsPaginatedView,
+    name: 'beer-list',
+    component: ListBeersView,
   },
   {
     path: '/beer/:id',

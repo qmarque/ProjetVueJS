@@ -1,6 +1,6 @@
 <template>
-  <div class="transactionsPaginated">
-            <transactions-paginated
+  <div class="beers">
+            <ListBeers
 msg="Ma liste de bières"
 :data="trans"
 :total-pages="Math.ceil(trans.length / 8)"
@@ -13,13 +13,13 @@ msg="Ma liste de bières"
 </template>
 
 <script>
-import TransactionsPaginated from '@/components/TransactionsPaginated.vue';
+import ListBeers from '@/components/ListBeers.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'TransactionsPaginatedView',
+  name: 'ListBeersView',
   components: {
-    TransactionsPaginated,
+    ListBeers,
   },
   mounted() {
     this.loadTrans();
